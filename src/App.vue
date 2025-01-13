@@ -133,8 +133,13 @@ const toggleReviewer = (reviewer: ReviewerData) => {
 
 <template>
   <header class="pb-24 pt-16">
-    <div class="text-center text-4xl">
-      <span>Elsevier Review Tracker</span>
+    <div class="mx-auto flex items-center justify-center space-x-4">
+      <div>
+        <img src="/favicon.png" alt="Logo" class="mx-auto h-12 w-12" />
+      </div>
+      <div class="text-center text-4xl">
+        <span>Elsevier Review Tracker</span>
+      </div>
     </div>
   </header>
 
