@@ -132,19 +132,19 @@ const toggleReviewer = (reviewer: ReviewerData) => {
 </script>
 
 <template>
-  <header class="pb-24 pt-16">
+  <header class="px-4 pb-12 pt-16 md:pb-24">
     <div class="mx-auto flex items-center justify-center space-x-4">
       <div>
-        <img src="/favicon.png" alt="Logo" class="mx-auto h-12 w-12" />
+        <img src="/favicon.png" alt="Logo" class="mx-auto h-12 w-12 object-cover object-center" />
       </div>
-      <div class="text-center text-4xl">
+      <div class="text-center text-2xl md:text-4xl">
         <span>Elsevier Review Tracker</span>
       </div>
     </div>
   </header>
 
   <main>
-    <div class="mx-auto flex max-w-2xl flex-col space-y-6">
+    <div class="mx-auto flex max-w-2xl flex-col space-y-6 px-4">
       <div>
         <p>
           Enter the <span class="underline underline-offset-2">UUID</span> of your article to view
@@ -156,16 +156,16 @@ const toggleReviewer = (reviewer: ReviewerData) => {
           <code>https://track.authorhub.elsevier.com/?uuid={UUID}</code>
         </p>
       </div>
-      <div class="flex space-x-4">
+      <div class="flex space-x-4 text-sm md:text-base">
         <input
-          class="focus:shadow-outline w-3/4 appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+          class="focus:shadow-outline appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none md:w-3/4"
           id="uuid"
           type="text"
           placeholder="uuid"
           v-model="uuid"
         />
         <button
-          class="w-1/4 rounded bg-indigo-600 px-4 py-2 font-semibold text-white hover:bg-indigo-700"
+          class="rounded bg-indigo-600 px-4 py-2 font-semibold text-white hover:bg-indigo-700 md:w-1/4"
           @click="fetchReviewData"
         >
           Get review data
@@ -206,7 +206,7 @@ const toggleReviewer = (reviewer: ReviewerData) => {
                 :key="revision.Id"
                 class="flex flex-col space-y-2 rounded bg-slate-100 p-4 transition-all duration-500 ease-in-out"
                 :class="{
-                  'max-h-12 overflow-hidden': revision.Collapsed,
+                  'max-h-16 overflow-hidden md:max-h-12': revision.Collapsed,
                   'max-h-[1000px] overflow-scroll': !revision.Collapsed,
                 }"
               >
@@ -244,23 +244,23 @@ const toggleReviewer = (reviewer: ReviewerData) => {
                           {{ reviewer.Collapsed ? '+' : '-' }}
                         </button>
                       </div>
-                      <div>
-                        <span class="font-semibold">Status</span>:
-                        <span>{{ getStatus(reviewer) }}</span>
+                      <div class="text-sm">
                         <div>
-                          <div>
-                            <span class="font-semibold">Invited on</span>:
-                            <span>{{ getReadableDate(reviewer.InvitedDate) }}</span>
-                          </div>
+                          <span class="font-semibold">Status</span>:
+                          <span>{{ getStatus(reviewer) }}</span>
+                        </div>
+                        <div>
+                          <span class="font-semibold">Invited on</span>:
+                          <span>{{ getReadableDate(reviewer.InvitedDate) }}</span>
                         </div>
                         <div v-if="reviewer.AcceptedDate">
                           <span class="font-semibold">Accepted on</span>:
                           <span>{{ getReadableDate(reviewer.AcceptedDate) }}</span>
                         </div>
-                      </div>
-                      <div v-if="reviewer.CompletedDate">
-                        <span class="font-semibold">Completed on</span>:
-                        <span>{{ getReadableDate(reviewer.CompletedDate) }}</span>
+                        <div v-if="reviewer.CompletedDate">
+                          <span class="font-semibold">Completed on</span>:
+                          <span>{{ getReadableDate(reviewer.CompletedDate) }}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
