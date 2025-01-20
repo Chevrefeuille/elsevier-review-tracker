@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import type {
   ReviewData,
   RevisionMap,
@@ -22,6 +23,18 @@ const uuid = ref('')
 const reviewData = ref<FormattedReviewData | null>(null)
 const isLoading = ref(false)
 const error = ref('')
+
+const route = useRoute()
+const router = useRouter()
+
+onMounted(async () => {
+  await router.isReady()
+  const uuidParam = route.query.uuid as string
+  if (uuidParam) {
+    uuid.value = uuidParam
+    fetchReviewData()
+  }
+})
 
 // Group and sort the review events
 const formatReviewData = (reviewData: ReviewData) => {
@@ -129,6 +142,13 @@ const toggleRevision = (revision: RevisionData) => {
 const toggleReviewer = (reviewer: ReviewerData) => {
   reviewer.Collapsed = !reviewer.Collapsed
 }
+
+const getDaysSince = (timestamp: number) => {
+  const date = new Date(timestamp * 1000) // Convert seconds to milliseconds
+  const now = new Date()
+  const diff = now.getTime() - date.getTime()
+  return Math.floor(diff / (1000 * 60 * 60 * 24))
+}
 </script>
 
 <template>
@@ -195,11 +215,17 @@ const toggleReviewer = (reviewer: ReviewerData) => {
               </div>
               <div>
                 <span class="font-semibold">Submitted on</span>:
-                <span>{{ getReadableDate(reviewData.SubmissionDate) }}</span>
+                <span>{{ getReadableDate(reviewData.SubmissionDate) }}</span> ({{
+                  getDaysSince(reviewData.SubmissionDate)
+                }}
+                days ago)
               </div>
               <div>
                 <span class="font-semibold">Last updated on</span>:
-                <span>{{ getReadableDate(reviewData.LastUpdated) }}</span>
+                <span>{{ getReadableDate(reviewData.LastUpdated) }}</span> ({{
+                  getDaysSince(reviewData.LastUpdated)
+                }}
+                days ago)
               </div>
               <div class="flex flex-col-reverse space-y-2 space-y-reverse">
                 <div
@@ -252,15 +278,24 @@ const toggleReviewer = (reviewer: ReviewerData) => {
                           </div>
                           <div>
                             <span class="font-semibold">Invited on</span>:
-                            <span>{{ getReadableDate(reviewer.InvitedDate) }}</span>
+                            <span>{{ getReadableDate(reviewer.InvitedDate) }}</span> ({{
+                              getDaysSince(reviewer.InvitedDate)
+                            }}
+                            days ago)
                           </div>
                           <div v-if="reviewer.AcceptedDate">
                             <span class="font-semibold">Accepted on</span>:
-                            <span>{{ getReadableDate(reviewer.AcceptedDate) }}</span>
+                            <span>{{ getReadableDate(reviewer.AcceptedDate) }}</span> ({{
+                              getDaysSince(reviewer.AcceptedDate)
+                            }}
+                            days ago)
                           </div>
                           <div v-if="reviewer.CompletedDate">
                             <span class="font-semibold">Completed on</span>:
-                            <span>{{ getReadableDate(reviewer.CompletedDate) }}</span>
+                            <span>{{ getReadableDate(reviewer.CompletedDate) }}</span> ({{
+                              getDaysSince(reviewer.CompletedDate)
+                            }}
+                            days ago)
                           </div>
                         </div>
                       </div>
